@@ -1,0 +1,10 @@
+geopandas
+rasterio
+numpy
+scipy
+scikit-image
+shapely
+pyproj
+pandas
+fiona
+rtree
