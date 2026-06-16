@@ -6,68 +6,88 @@ This repository contains the final alignment solution for the BhuMe assignment.
 
 ```
 BhuMe/
-│
-├── solve.py
-├── run_all.py
-├── analyze_data.py
+├── solve.py                    # Core alignment pipeline
+├── run_all.py                  # Batch runner for all villages
+├── analyze_data.py             # Data analysis utilities
+├── .gitignore                  # Git ignore for large raster files
 ├── README.md
 ├── requirements.txt
-│
-├── transcripts/
-│
+├── transcripts/                # AI assistance transcripts
+│   ├── transcript.jsonl
+│   └── README.md
 └── data/
     ├── 12409_malatavadi_chandgad_kolhapur/
     │   ├── input.geojson
-    │   ├── imagery.tif
-    │   ├── boundaries.tif
-    │   └── predictions.geojson
-    │
+    │   ├── predictions.geojson
+    │   ├── imagery.tif          # (provided separately)
+    │   └── boundaries.tif       # (provided separately)
     └── 34855_vadnerbhairav_chandavad_nashik/
         ├── input.geojson
-        ├── imagery.tif
-        ├── boundaries.tif
-        └── predictions.geojson
+        ├── predictions.geojson
+        ├── imagery.tif          # (provided separately)
+        └── boundaries.tif       # (provided separately)
 ```
 
-- **`solve.py`**: The core alignment pipeline. It executes the village-level registration and local refinements.
-- **`run_all.py`**: Runs `solve.py` on every village folder under `data/` and writes `predictions.geojson` in each folder.
-- **`analyze_data.py`**: Auxiliary analysis utilities.
+### File Descriptions
+
+- **`solve.py`**: The core alignment pipeline. Executes village-level registration and local refinements.
+- **`run_all.py`**: Batch runner that processes all village folders under `data/` and generates `predictions.geojson` for each.
+- **`analyze_data.py`**: Auxiliary analysis utilities for examining input data, predictions, and alignment quality.
 - **`requirements.txt`**: Python dependencies needed to run the solver.
-- **`transcripts/`**: Conversation transcripts documenting the research, architectural problem-solving, and auditing phases.
+- **`transcripts/`**: Complete conversation transcripts documenting research, architectural decisions, and development phases.
+- **`.gitignore`**: Excludes large raster files (imagery.tif and boundaries.tif) to keep repository lightweight.
 
-## Execution
+## Quick Start
 
-To run the pipeline on a single village bundle:
+### Installation
 
-```bash
-python solve.py data/34855_vadnerbhairav_chandavad_nashik
-python solve.py data/12409_malatavadi_chandgad_kolhapur
-```
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. Place the village data bundles (imagery.tif and boundaries.tif for each village) in the appropriate folders under `data/`
 
-To process all villages inside `data/`:
+### Running the Pipeline
+
+**Process all villages at once:**
 
 ```bash
 python run_all.py
 ```
+
+**Process a single village manually:**
+
+```bash
+python solve.py data/12409_malatavadi_chandgad_kolhapur
+python solve.py data/34855_vadnerbhairav_chandavad_nashik
+```
+
+### Data Analysis
+
+Analyze and compare predictions against example truths:
+
+```bash
+python analyze_data.py
+```
+
+This will display:
+- Village bundle summaries (number of plots, CRS, file availability)
+- Comparison metrics between predictions and example_truths.geojson (if available)
 
 ## Reproducible Release
 
 To publish this project on GitHub with generated predictions:
 
 ```bash
-git add solve.py run_all.py requirements.txt README.md \
+git add solve.py run_all.py analyze_data.py requirements.txt README.md .gitignore transcripts \
   data/12409_malatavadi_chandgad_kolhapur/predictions.geojson \
   data/34855_vadnerbhairav_chandavad_nashik/predictions.geojson
-+git commit -m "Add BhuMe solver and village predictions"
-+git push
+git commit -m "Add BhuMe solver, utilities, and village predictions"
+git push
 ```
 
-To regenerate the predictions locally after cloning:
-
-```bash
-python solve.py data/12409_malatavadi_chandgad_kolhapur
-python solve.py data/34855_vadnerbhairav_chandavad_nashik
-```
+**Note**: Large raster files (`imagery.tif`, `boundaries.tif`) are excluded by `.gitignore` and should be provided separately to evaluators.
 
 ## Notes
 
